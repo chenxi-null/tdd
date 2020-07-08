@@ -3,6 +3,7 @@ package com.chenxi.tdd.embeddeddb
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.TestPropertySource
 import spock.lang.Specification
 /**
  *
@@ -11,6 +12,7 @@ import spock.lang.Specification
  */
 @Import(UserDao)
 @JdbcTest
+@TestPropertySource('classpath:application-test.properties')
 class UserDaoTest extends Specification {
 
     @Autowired

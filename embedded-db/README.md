@@ -1,5 +1,8 @@
-Try hard to become a clean coder.
+# 基于内存数据库进行测试
 
-- Writing clean code
-- Using productivity tools
-- Changing the world, make the world cleaner
+## Why
+
+使用真实数据库会比较慢，清除数据不方便，如果多个地方同时 run test 并发访问数据库，容易出现数据不一致的情况，造成 tricky test，同时也不方便集成 CI 系统
+
+为了方便管理数据库的变更记录，通常我们会数据库版本管理系统来记录、同步 SQL 的变化，这里我们以 Flyway 为例，演示如何在集成了 Flyway 的 SpringBoot 应用中进行基于**内存数据库**的集成测试。
+
