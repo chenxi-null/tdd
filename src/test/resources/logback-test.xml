@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_DIR" value="${catalina.base}/logs"/>
+
+    <!-- use Spring default values -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="org.apache.zookeeper" level="warn"/>
+    <logger name="org.apache.curator.framework.imps.CuratorFrameworkImpl" level="warn"/>
+    <logger name="org.apache.curator.framework.state.ConnectionStateManager" level="warn"/>
+
+    <logger name="com.athaydes.spockframework.report" level="warn"/>
+
+    <logger name="org.springframework.boot.test" level="warn"/>
+
+    <logger name="org.springframework" level="info"/>
+
+    <logger name="com.chenxi" level="trace"/>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
