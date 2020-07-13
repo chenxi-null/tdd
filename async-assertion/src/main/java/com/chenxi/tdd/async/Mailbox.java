@@ -11,6 +11,10 @@ public class Mailbox {
 
     private final Collection<String> contents = new HashSet<>();
 
+    public int numOfReceivedMail() {
+        return contents.size();
+    }
+
     public boolean containsMail(String msg) {
         return contents.contains(msg);
     }

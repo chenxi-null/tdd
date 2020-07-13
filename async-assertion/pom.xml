@@ -13,5 +13,12 @@
     <artifactId>async-assertion</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility-groovy</artifactId>
+            <version>4.0.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

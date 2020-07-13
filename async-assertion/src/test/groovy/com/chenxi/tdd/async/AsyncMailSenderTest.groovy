@@ -1,7 +1,14 @@
 package com.chenxi.tdd.async
 
+
+import org.spockframework.runtime.ConditionNotSatisfiedError
+import spock.lang.FailsWith
 import spock.lang.Specification
 
+import java.time.Duration
+
+import static org.awaitility.Awaitility.await
+import static org.hamcrest.Matchers.equalTo
 /**
  *
  * @author chenxi <chenxi01@souche.com>
@@ -9,18 +16,32 @@ import spock.lang.Specification
  */
 class AsyncMailSenderTest extends Specification {
 
-    def "SendMail"() {
-        given:
-        def mailBox = new Mailbox()
-        def asyncMailSender =  new AsyncMailSender(mailBox)
-        def msg = "hello world"
+    def mailBox
+    def asyncMailSender
+    def msg = "hello world"
 
-        when:
+    void setup() {
+        mailBox = new Mailbox()
+        asyncMailSender = new AsyncMailSender(mailBox)
+    }
+
+    @FailsWith(ConditionNotSatisfiedError)
+    def "SendMail"() {
+        when: "invoke async operation"
         asyncMailSender.sendMail(msg)
-        println "---"
+
+        then: "failed to assert because the async operation isn't finished"
+        mailBox.containsMail(msg)
+    }
+
+    def "assert with Awaitility"() {
+        when: "invoke async operation"
+        asyncMailSender.sendMail(msg)
+
         then:
-        println "==="
-        mailBox.containsMail("other")
+        await().atMost(Duration.ofSeconds(3))
+                .until({ mailBox.numOfReceivedMail() }, equalTo(1))
+        and:
         mailBox.containsMail(msg)
     }
 }
