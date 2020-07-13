@@ -4,11 +4,13 @@ package com.chenxi.tdd.async
 import org.spockframework.runtime.ConditionNotSatisfiedError
 import spock.lang.FailsWith
 import spock.lang.Specification
+import spock.util.concurrent.PollingConditions
 
 import java.time.Duration
 
 import static org.awaitility.Awaitility.await
 import static org.hamcrest.Matchers.equalTo
+
 /**
  *
  * @author chenxi <chenxi01@souche.com>
@@ -34,14 +36,25 @@ class AsyncMailSenderTest extends Specification {
         mailBox.containsMail(msg)
     }
 
+    // https://github.com/awaitility/awaitility/wiki/Groovy
     def "assert with Awaitility"() {
         when: "invoke async operation"
         asyncMailSender.sendMail(msg)
 
         then:
-        await().atMost(Duration.ofSeconds(3))
+        await().atLeast(Duration.ofSeconds(1)).atMost(Duration.ofSeconds(3))
                 .until({ mailBox.numOfReceivedMail() }, equalTo(1))
         and:
         mailBox.containsMail(msg)
+    }
+
+    def "assert with PollingCondition"() {
+        PollingConditions pollingConditions = new PollingConditions()
+
+        when:
+        asyncMailSender.sendMail(msg)
+
+        then:
+        pollingConditions.within(2, { mailBox.containsMail(msg) })
     }
 }
