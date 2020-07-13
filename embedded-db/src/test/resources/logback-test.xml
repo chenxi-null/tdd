@@ -12,15 +12,13 @@
         </encoder>
     </appender>
 
+    <logger name="com.athaydes.spockframework.report" level="warn"/>
+
     <logger name="org.apache.zookeeper" level="warn"/>
     <logger name="org.apache.curator.framework.imps.CuratorFrameworkImpl" level="warn"/>
     <logger name="org.apache.curator.framework.state.ConnectionStateManager" level="warn"/>
 
-    <logger name="com.athaydes.spockframework.report" level="warn"/>
-
     <logger name="org.springframework.boot.test" level="warn"/>
-
-    <logger name="org.springframework" level="info"/>
 
     <logger name="com.chenxi" level="trace"/>
 
