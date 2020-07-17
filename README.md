@@ -1,5 +1,18 @@
-Try hard to become a clean coder.
 
-- Writing clean code
-- Using productivity tools
-- Changing the world, make the world cleaner
+## TDD (Test Driven Development) in action
+
+- [ ] embedded DB 
+    - [x] work with flyway
+    
+- [ ] how to create data gracefully
+
+- [ ] assert **async** operation
+
+- [ ] Spring Test
+  - [ ] Spring Context Caching
+  - [ ] How to mock spring bean
+
+- [ ] Spring Boot Test 
+    - [ ] test slice
+
+- [ ] mock outside service
