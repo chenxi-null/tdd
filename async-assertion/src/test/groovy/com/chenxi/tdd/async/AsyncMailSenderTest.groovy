@@ -57,4 +57,13 @@ class AsyncMailSenderTest extends Specification {
         then:
         pollingConditions.within(2, { mailBox.containsMail(msg) })
     }
+
+    // notify:
+
+    // user thread API
+
+    // change source code
+
+    // byte generate tech
+    //  https://dzone.com/articles/testing-asynchronous-operations-in-spring-with-spo
 }
