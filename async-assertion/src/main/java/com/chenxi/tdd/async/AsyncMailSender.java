@@ -1,5 +1,6 @@
 package com.chenxi.tdd.async;
 
+import com.google.common.annotations.VisibleForTesting;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class AsyncMailSender {
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-    private Mailbox mailbox;
+    private final Mailbox mailbox;
 
     public AsyncMailSender(Mailbox mailbox) {
         this.mailbox = mailbox;
@@ -33,5 +34,11 @@ public class AsyncMailSender {
         TimeUnit.SECONDS.sleep(1);
         mailbox.receiveMail(msg);
         log.info("sent mail, msg: {}", msg);
+    }
+
+
+    @VisibleForTesting
+    public ExecutorService getExecutorService() {
+        return executorService;
     }
 }
