@@ -4,6 +4,7 @@ package com.chenxi.tdd.async
 import groovy.util.logging.Slf4j
 import org.spockframework.runtime.ConditionNotSatisfiedError
 import spock.lang.FailsWith
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.util.concurrent.AsyncConditions
 import spock.util.concurrent.PollingConditions
@@ -44,6 +45,18 @@ class AsyncMailSenderTest extends Specification {
         mailBox.containsMail(msg)
     }
 
+    def "async assert with sleep"() {
+        when: "invoke async operation"
+        asyncMailSender.sendMail(msg)
+
+        then:
+        sleep(2000)
+        and:
+        mailBox.containsMail(msg)
+    }
+
+    // ---------------------- Polling Assertion ----------------------
+
     // https://github.com/awaitility/awaitility/wiki/Groovy
     def "async assert with Awaitility"() {
         when: "invoke async operation"
@@ -66,19 +79,8 @@ class AsyncMailSenderTest extends Specification {
         pollingConditions.within(2, { mailBox.containsMail(msg) })
     }
 
-    def "async assert with JDK Thread APIs"() {
-        when:
-        asyncMailSender.sendMail(msg)
 
-        and: "wait that all tasks have completed execution in thread pool"
-        ExecutorService executorService = asyncMailSender.getExecutorService()
-        executorService.shutdown()
-        executorService.awaitTermination(2, TimeUnit.SECONDS)
-        log.debug(executorService.toString())
-
-        then:
-        mailBox.containsMail(msg)
-    }
+    // ---------------------- Wait-and-Notify ----------------------
 
     def "async assert by modifying feat code, for example, adding hook"() {
         given:
@@ -94,13 +96,22 @@ class AsyncMailSenderTest extends Specification {
         msg == f.get()
     }
 
-    // byte generate tech
-    //  https://dzone.com/articles/testing-asynchronous-operations-in-spring-with-spo
+    def "async assert by mocking receiver"() {
+        given:
+        def f = new CompletableFuture()
+        Mailbox mailbox = Stub {
+            receiveMail(_) >> { String _msg -> f.complete(msg) }
+        }
+        AsyncMailSender asyncMailSender = new AsyncMailSender(mailbox)
 
-    //----------------------------------------------------
+        when:
+        asyncMailSender.sendMail(msg)
 
+        then:
+        msg == f.get()
+    }
 
-    def "mock async behavior with `AsyncCondition`"() {
+    def "async assert with `AsyncCondition`"() {
         given:
         def asyncConditions = new AsyncConditions()
         Mailbox mailbox = Stub {
@@ -113,5 +124,50 @@ class AsyncMailSenderTest extends Specification {
 
         then:
         asyncConditions.await(2)
+    }
+
+    static class Message {
+        int id
+        String content
+        String tag
+    }
+
+    @Ignore("just to demonstrate")
+    def "AsyncConditions can report detailed failed result of assertion"() {
+        def asyncConditions = new AsyncConditions()
+        when:
+        def msg = new Message(id: 100, content: 'content1', tag: 'tag1')
+        Thread.start {
+            asyncConditions.evaluate {
+                verifyAll(msg) {
+                    id == 101
+                    content == 'content2'
+                    tag == 'tag1'
+                }
+            }
+        }
+
+        then:
+        asyncConditions.await(1)
+    }
+
+    // byte generate tech
+    //  https://dzone.com/articles/testing-asynchronous-operations-in-spring-with-spo
+
+
+    //----------------------------------------------------
+
+    def "async assert with JDK Thread APIs"() {
+        when:
+        asyncMailSender.sendMail(msg)
+
+        and: "wait that all tasks have completed execution in thread pool"
+        ExecutorService executorService = asyncMailSender.getExecutorService()
+        executorService.shutdown()
+        executorService.awaitTermination(2, TimeUnit.SECONDS)
+        log.debug(executorService.toString())
+
+        then:
+        mailBox.containsMail(msg)
     }
 }
