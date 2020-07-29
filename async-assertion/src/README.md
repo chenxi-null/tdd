@@ -57,7 +57,7 @@ def "async assert with Awaitility"() {
 ```
 
 ### PollingCondition of Spock
-PollingConditon 是 Spock 自带的，个人认为它的语法比 Awaitility 更简洁
+PollingCondition 是 Spock 自带的，个人认为它的语法比 Awaitility 更简洁
 
 ```groovy
 def "async assert with PollingCondition"() {
