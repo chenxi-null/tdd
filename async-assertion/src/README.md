@@ -155,7 +155,7 @@ def "AsyncConditions can report detailed failed result of assertion"() {
     asyncConditions.await(1)
 }
 ```
-![](2020-07-29-11-43-33.png)
+![](https://chenxi-null.github.io/images/2020-07-29-11-43-33.png)
 
 ### 字节码生成工具
 
