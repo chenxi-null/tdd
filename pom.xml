@@ -19,7 +19,7 @@
     </modules>
 
     <properties>
-        <jackson.version>2.11.1</jackson.version>
+        <jackson.version>2.12.7.1</jackson.version>
         <groovy.version>2.4.15</groovy.version>
         <spock.version>1.2-groovy-2.4</spock.version>
         <spock.spring.version>1.2-groovy-2.4</spock.spring.version>
